@@ -11,8 +11,39 @@ booksRoutes.post("/", async(req : Request, res : Response) => {
          data : books
     })
     
-})
+});
 
+booksRoutes.get("/", async (req: Request, res: Response) => {
+  try {
+    const filter = req.query.filter as string;
+    const sortBy = req.query.sortBy as string || "createdAt";
+    const sortOrder = req.query.sort === "desc" ? -1 : 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    // Base query
+    let query = Book.find();
+
+    // Apply genre filter
+    if (filter) {
+      query = Book.find({genre : filter})
+    }
+
+// Apply sort and limit
+    const books = await query.sort({ [sortBy]: sortOrder }).limit(limit);
+
+    res.status(200).json({
+      success: true,
+      message: "Books retrieved successfully",
+      data: books,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching books",
+      error: error.message,
+    });
+  }
+});
 
 
 // notesRoutes.get("", async(req : Request, res : Response) => {
