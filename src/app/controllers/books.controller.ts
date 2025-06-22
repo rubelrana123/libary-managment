@@ -44,7 +44,27 @@ booksRoutes.get("/", async (req: Request, res: Response) => {
     });
   }
 });
-
+booksRoutes.get("/:bookId", async(req : Request, res : Response) => {
+    try {
+    const id = req.params.bookId;
+    const book = await Book.findById(id);
+    // console.log({id})
+    res.status(201).json({
+        success : true, 
+        message : "Book retrieved successfully",
+        data : book
+    })
+    } catch (error : any) {
+      
+    res.status(500).json({
+      success: false,
+      message: "Error fetching books",
+      error: error.message,
+    });
+        
+    }
+    
+});
 
 // notesRoutes.get("", async(req : Request, res : Response) => {
 //       try {
