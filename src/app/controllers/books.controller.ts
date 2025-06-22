@@ -65,6 +65,27 @@ booksRoutes.get("/:bookId", async(req : Request, res : Response) => {
     }
     
 });
+booksRoutes.patch("/:bookId", async(req : Request, res : Response) => {
+    try {
+    const id = req.params.bookId;
+    const payload = req.body;
+    const book = await Book.findByIdAndUpdate(id, {$set : payload}, {new : true});
+    res.status(201).json({
+        success : true, 
+        message : "Book updated successfully",
+        data : book
+    })
+    } catch (error : any) {
+      
+    res.status(500).json({
+      success: false,
+      message: "Error fetching books",
+      error: error.message,
+    });
+        
+    }
+    
+});
 
 // notesRoutes.get("", async(req : Request, res : Response) => {
 //       try {
