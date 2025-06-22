@@ -49,11 +49,11 @@ const bookSchema = new Schema({
   versionKey : false
 });
 
-bookSchema.pre('validate', function (next) {
-  if (this.genre && typeof this.genre === 'string') {
-    this.genre = this.genre.toUpperCase() as Genre;
-  }
-  next();
-});
+// bookSchema.pre('validate', function (next) {
+//   if (this.genre && typeof this.genre === 'string') {
+//     this.genre = this.genre.toUpperCase() as Genre;
+//   }
+//   next();
+// });
 
 export const Book = model('Book', bookSchema);
