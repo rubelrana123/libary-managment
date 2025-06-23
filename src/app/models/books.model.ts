@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import { Model, Schema, model } from 'mongoose';
+import { BookInstanceMethods, IBook } from '../interfaces/books.interface';
 
 export enum Genre {
   FICTION = "FICTION",
@@ -9,7 +10,7 @@ export enum Genre {
   FANTASY = "FANTASY"
 }
 
-const bookSchema = new Schema({
+const bookSchema = new Schema<IBook, Model<IBook>, BookInstanceMethods>({
   title: {
     type: String,
     required: true,
@@ -23,7 +24,6 @@ const bookSchema = new Schema({
   genre: {
     type: String,
     required: [true, "Must be one of: `FICTION`, `NON_FICTION`, `SCIENCE`, `HISTORY`, `BIOGRAPHY`, `FANTASY`."],
-    // uppercase : true,
     enum: Object.values(Genre)
   },
   isbn: {
@@ -61,13 +61,10 @@ bookSchema.pre('validate', function (next) {
   next();
 });
 
-bookSchema.methods.updateAvailability = function() {
-  if (this.copies === 0) {
-    this.available = false;
-  } else {
-    this.available = true;
-  }
-  return this.save();
-};
+bookSchema.method("updateAvailability", async function () {
+  this.available = this.copies > 0;
+  await this.save();
+});
+
 
 export const Book = model('Book', bookSchema);
