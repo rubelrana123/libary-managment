@@ -37,9 +37,9 @@ const bookSchema = new Schema({
   },
   copies: {
     type: Number,
-    required: true,
+    required: [true, "Number of copies is required"],
     min: 0,
-      validate: {
+    validate: {
     validator: Number.isInteger,
     message: "Copies must be an integer value",
   },
@@ -60,5 +60,14 @@ bookSchema.pre('validate', function (next) {
   }
   next();
 });
+
+bookSchema.methods.updateAvailability = function() {
+  if (this.copies === 0) {
+    this.available = false;
+  } else {
+    this.available = true;
+  }
+  return this.save();
+};
 
 export const Book = model('Book', bookSchema);
