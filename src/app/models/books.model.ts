@@ -22,13 +22,13 @@ const bookSchema = new Schema({
   },
   genre: {
     type: String,
-    required: true,
+    required: [true, "Must be one of: `FICTION`, `NON_FICTION`, `SCIENCE`, `HISTORY`, `BIOGRAPHY`, `FANTASY`."],
     // uppercase : true,
     enum: Object.values(Genre)
   },
   isbn: {
     type: String,
-    required: true,
+    required: [true,"isdn must be a unique number"],
     unique: true,
     trim: true
   },
@@ -38,7 +38,12 @@ const bookSchema = new Schema({
   copies: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+      validate: {
+    validator: Number.isInteger,
+    message: "Copies must be an integer value",
+  },
+
   },
   available: {
     type: Boolean,
@@ -49,11 +54,11 @@ const bookSchema = new Schema({
   versionKey : false
 });
 
-// bookSchema.pre('validate', function (next) {
-//   if (this.genre && typeof this.genre === 'string') {
-//     this.genre = this.genre.toUpperCase() as Genre;
-//   }
-//   next();
-// });
+bookSchema.pre('validate', function (next) {
+  if (this.genre && typeof this.genre === 'string') {
+    this.genre = this.genre.toUpperCase() as Genre;
+  }
+  next();
+});
 
 export const Book = model('Book', bookSchema);

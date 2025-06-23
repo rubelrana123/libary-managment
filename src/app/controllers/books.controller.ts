@@ -1,17 +1,32 @@
  
-import express, {Application, Request,Response} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Book } from '../models/books.model';
  
 export const booksRoutes = express.Router();
-booksRoutes.post("/", async(req : Request, res : Response) => {
-    const books = await Book.create(req.body) 
+
+
+booksRoutes.post("/", async (req: Request, res: Response, next : NextFunction) : Promise<any> => {
+  try {
+    const books = await Book.create(req.body);
     res.status(201).json({
-        success : true,
-        message: "Book created successfully",
-         data : books
-    })
-    
+      success: true,
+      message: "Book created successfully",
+      data: books,
+    });
+  } catch (error: any) {
+      if (error.name === "ValidationError") {
+    return res.status(400).json({
+      message: "Validation failed",
+      success: false,
+      error: {
+        name: error.name,
+        errors: error.errors,
+      },
+    });
+  }
+  }
 });
+
 
 booksRoutes.get("/", async (req: Request, res: Response) => {
   try {
