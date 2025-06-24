@@ -8,7 +8,7 @@ A powerful backend API for managing a library system, built with **Node.js**, **
 
 ## 🌐 Live Demo
 
-- **API:** [https://libary-managment.vercel.app/](https://libary-managment.vercel.app/)
+- **API:** [https://libary-managment.vercel.app/api](https://libary-managment.vercel.app/api)
 - **Video Explanation:** [Click Here](https://drive.google.com/file/d/1M5MfHwMFe2MmR7FGOjvB05x5Tw-E5sjE/view?usp=sharing)
 
 ---
