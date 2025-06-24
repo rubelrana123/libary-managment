@@ -1,5 +1,6 @@
 import { Model, Schema, model } from 'mongoose';
 import { BookInstanceMethods, IBook } from '../interfaces/books.interface';
+import { Borrow } from './borrow.model';
 
 export enum Genre {
   FICTION = "FICTION",
@@ -13,23 +14,26 @@ export enum Genre {
 const bookSchema = new Schema<IBook, Model<IBook>, BookInstanceMethods>({
   title: {
     type: String,
-    required: true,
+    required: [true, "title field are required"],
     trim: true
   },
   author: {
     type: String,
-    required: true,
+    required: [true, "author field are required"],
     trim: true
   },
-  genre: {
-    type: String,
-    required: [true, "Must be one of: `FICTION`, `NON_FICTION`, `SCIENCE`, `HISTORY`, `BIOGRAPHY`, `FANTASY`."],
-    enum: Object.values(Genre)
-  },
+ genre: {
+  type: String,
+  required: [true, 'Genre is required'],
+  enum: {
+    values: Object.values(Genre),
+    message: '{VALUE} is not a valid genre. Allowed values: FICTION, NON_FICTION, SCIENCE, HISTORY',
+  }
+ },
   isbn: {
     type: String,
-    required: [true,"isdn must be a unique number"],
-    unique: true,
+    required: [true, "isbn field are required"],
+    unique: true , 
     trim: true
   },
   description: {
@@ -37,13 +41,8 @@ const bookSchema = new Schema<IBook, Model<IBook>, BookInstanceMethods>({
   },
   copies: {
     type: Number,
-    required: [true, "Number of copies is required"],
-    min: 0,
-    validate: {
-    validator: Number.isInteger,
-    message: "Copies must be an integer value",
-  },
-
+    required: [true, "copies field are required"],
+    min: [0 , "Not allow negative number"]
   },
   available: {
     type: Boolean,
@@ -65,6 +64,13 @@ bookSchema.method("updateAvailability", async function () {
   this.available = this.copies > 0;
   await this.save();
 });
+
+bookSchema.post("findOneAndDelete", async (doc, next) => {
+  if (doc) {
+    await Borrow.deleteMany({ book: doc._id });
+    next();
+  }
+})
 
 
 export const Book = model('Book', bookSchema);

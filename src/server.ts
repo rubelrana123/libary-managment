@@ -1,18 +1,16 @@
 import { Server } from "http";
+import mongoose from "mongoose";
 import app from "./app";
-
-// getting-started.js
-const mongoose = require ('mongoose');
-
-// main().catch(err => console.log(err));
+import config from "./config";
 let server : Server;
 const port = 5000;
+const uri = config.database_url; 
 async function main() {
     try {
-        await mongoose.connect('mongodb://localhost:27017/libaryManagment');
+        await mongoose.connect(uri as string);
         console.log("server is connected")
-        server = app.listen(port, () => {
-            console.log(`App is listening on port ${port}`);
+        server = app.listen(config.port, () => {
+            console.log(`App is listening on port ${config.port}`);
 
         })
         

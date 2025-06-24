@@ -4,8 +4,6 @@ import { Book } from '../models/books.model';
 export const createBook = async (req: Request, res: Response, next : NextFunction) : Promise<any> => {
   try {
     const books = await Book.create(req.body);
-    console.log(req.body);
-    console.log("books", books)
     res.status(201).json({
       success: true,
       message: "Book created successfully",
@@ -47,7 +45,6 @@ export const getBookById = async(req : Request, res : Response) => {
     try {
     const id = req.params.bookId;
     const book = await Book.findById(id);
-    // console.log({id})
     res.status(201).json({
         success : true, 
         message : "Book retrieved successfully",
@@ -71,23 +68,6 @@ export const updateBookById = async(req : Request, res : Response) : Promise<any
     const payload = req.body;
     
     const book = await Book.findByIdAndUpdate(id, payload, { new: true });
-
-    //   // Object.assign(payload,{available : true})
-    // const findBook = await Book.findById(id); 
-    // let book
-    //    book = await Book.findByIdAndUpdate(id, {$set : { copies , available : true}}, {new : true});
-    // if(findBook){
-      //   const copies=findBook.copies+parseInt(payload.copies)
-      
-  // }
-
-   
-  // console.log(book)
-  // if (book && typeof book?.updateAvailability === "function") {
-  //   console.log(first)
-  //   await book?.updateAvailability();
-  // }
-  // return book;
 
   if (book === null) {
       return res.status(404).json({

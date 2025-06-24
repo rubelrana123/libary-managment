@@ -16,20 +16,20 @@ res.send({
  }
 };
 
-export const getBorrowedBook = async function (req : Request,res: Response, next : NextFunction) {
-  try {
-  const borrow = await Borrow.find().populate('book')
-  res.send({
-  success: true,
-  message: "Book borrowed successfully",
-  data : borrow
-})
-  } catch (error) {
-    next(error)
+// export const getBorrowedBook = async function (req : Request,res: Response, next : NextFunction) {
+//   try {
+//   const borrow = await Borrow.find().populate('book')
+//   res.send({
+//   success: true,
+//   message: "Book borrowed successfully",
+//   data : borrow
+// })
+//   } catch (error) {
+//     next(error)
     
-  }
+//   }
 
-}
+// }
 export const getSummaryOfBorrowedBook = async (req: Request, res: Response) => {
     try {
         const summary = await Borrow.aggregate([
@@ -50,6 +50,7 @@ export const getSummaryOfBorrowedBook = async (req: Request, res: Response) => {
        { $unwind: "$book" },
   {
         $project: {
+            _id: 0,
           book: {
             title: "$book.title",
             isbn: "$book.isbn",
