@@ -1,5 +1,5 @@
  
-import express, { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Book } from '../models/books.model';
 export const createBook = async (req: Request, res: Response, next : NextFunction) : Promise<any> => {
   try {
@@ -20,16 +20,11 @@ export const getAllBooks = async (req: Request, res: Response, next : NextFuncti
     const sortBy = req.query.sortBy as string || "createdAt";
     const sortOrder = req.query.sort === "desc" ? -1 : 1;
     const limit = parseInt(req.query.limit as string) || 10;
-
-    // Base query
     let query = Book.find();
 
-    // Apply genre filter
     if (filter) {
       query = Book.find({genre : filter})
     }
-
-// Apply sort and limit
     const books = await query.sort({ [sortBy]: sortOrder }).limit(limit);
 
     res.status(200).json({

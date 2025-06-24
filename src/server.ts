@@ -2,9 +2,8 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import config from "./config";
-let server : Server;
-const port = 5000;
 const uri = config.database_url; 
+let server : Server;
 async function main() {
     try {
         await mongoose.connect(uri as string);
