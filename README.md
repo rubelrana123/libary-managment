@@ -78,6 +78,7 @@ npm run dev
 LIBRARY-MANAGEMENT/
 ├── src/
 │   ├── config/           # environment config
+|   ├── interface/        #All Interface
 │   ├── controllers/      # Route handlers and  Business logic
 │   ├── middlewares/      # Error & request handling
 │   ├── models/           # Mongoose schemas & methods
@@ -218,16 +219,36 @@ Business Logic:
 
 **GET** `/api/borrow`
 
-```json
-[
-  {
-    "book": {
-      "title": "The Theory of Everything",
-      "isbn": "9780553380163"
-    },
-    "totalQuantity": 5
-  }
-]
+```response
+{
+    "success": true,
+    "message": "Borrowed books summary retrieved successfully",
+    "data": [
+        {
+            "totalQuantity": 8,
+            "book": {
+                "title": "The Alchemist",
+                "isbn": "1234567892515"
+            }
+        },
+ 
+        {
+            "totalQuantity": 2,
+            "book": {
+                "title": "Becoming",
+                "isbn": "1234567892521"
+            }
+        },
+ 
+        {
+            "totalQuantity": 7,
+            "book": {
+                "title": "Educated",
+                "isbn": "1234567892524"
+            }
+        }
+    ]
+}
 ```
 ## 👨‍💻 Author
 
