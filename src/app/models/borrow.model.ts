@@ -11,8 +11,8 @@ const borrowSchema = new Schema<IBorrow ,BorrowStaticMethods>(
     },
     quantity: {
       type: Number,
-      required: true,
-      min: [1, "Quantity must be at least 1"],
+      required: [true, "must be integer and positve"],
+      min: [0, "Quantity cann't be negative"],
       validate: {
         validator: Number.isInteger,
         message: "Quantity must be an integer value",
@@ -37,16 +37,16 @@ borrowSchema.pre("save", async function (next) {
     return next(new Error("Book not found"));
   }
 
-  if (!book.available) {
-    return next(new Error("Book is currently not available "));
-  }
+//   if (!book.available) {
+//     return next(new Error("Book is currently not available "));
+//   }
 
-  // Check if enough copies are available
-  if (book.copies < borrow.quantity) {
-    return next(
-      new Error(`Only ${book.copies} copies are available`)
-    );
-  }
+//   // Check if enough copies are available
+//   if (book.copies < borrow.quantity) {
+//     return next(
+//       new Error(`Only ${book.copies} copies are available`)
+//     );
+//   }
   book.copies -= borrow.quantity;
   await book.save();
 
@@ -64,9 +64,9 @@ borrowSchema.static("checkBookAvailability", async function (bookId: Types.Objec
   }
 });
 
-borrowSchema.post("save", async function (doc) {
-  await (Borrow as any).checkBookAvailability(doc.book);
-});
+// borrowSchema.post("save", async function (doc) {
+//   await (Borrow as any).checkBookAvailability(doc.book);
+// });
 
 
 export const Borrow = model<IBorrow , BorrowStaticMethods>("Borrow", borrowSchema);

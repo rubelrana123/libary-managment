@@ -4,27 +4,19 @@ import { Book } from '../models/books.model';
 export const createBook = async (req: Request, res: Response, next : NextFunction) : Promise<any> => {
   try {
     const books = await Book.create(req.body);
+    console.log(req.body);
+    console.log("books", books)
     res.status(201).json({
       success: true,
       message: "Book created successfully",
       data: books,
     });
   } catch (error: any) {
-      if (error.name === "ValidationError") {
-    return res.status(400).json({
-      message: "Validation failed",
-      success: false,
-      error: {
-        name: error.name,
-        errors: error.errors,
-      },
-    });
-  }
+    next(error)
+ 
   }
 };
-
-
-export const getAllBooks = async (req: Request, res: Response) => {
+export const getAllBooks = async (req: Request, res: Response, next : NextFunction) => {
   try {
     const filter = req.query.filter as string;
     const sortBy = req.query.sortBy as string || "createdAt";
@@ -48,11 +40,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
       data: books,
     });
   } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Error fetching books",
-      error: error.message,
-    });
+       next(error)
   }
 };
 export const getBookById = async(req : Request, res : Response) => {
