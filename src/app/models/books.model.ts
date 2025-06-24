@@ -1,6 +1,6 @@
-import { Model, Schema, model } from 'mongoose';
-import { BookInstanceMethods, IBook } from '../interfaces/books.interface';
-import { Borrow } from './borrow.model';
+import { Model, Schema, model } from "mongoose";
+import { BookInstanceMethods, IBook } from "../interfaces/books.interface";
+import { Borrow } from "./borrow.model";
 
 export enum Genre {
   FICTION = "FICTION",
@@ -8,53 +8,57 @@ export enum Genre {
   SCIENCE = "SCIENCE",
   HISTORY = "HISTORY",
   BIOGRAPHY = "BIOGRAPHY",
-  FANTASY = "FANTASY"
+  FANTASY = "FANTASY",
 }
 
-const bookSchema = new Schema<IBook, Model<IBook>, BookInstanceMethods>({
-  title: {
-    type: String,
-    required: [true, "title field are required"],
-    trim: true
+const bookSchema = new Schema<IBook, Model<IBook>, BookInstanceMethods>(
+  {
+    title: {
+      type: String,
+      required: [true, "title field are required"],
+      trim: true,
+    },
+    author: {
+      type: String,
+      required: [true, "author field are required"],
+      trim: true,
+    },
+    genre: {
+      type: String,
+      required: [true, "Genre is required"],
+      enum: {
+        values: Object.values(Genre),
+        message:
+          "{VALUE} is not a valid genre. Allowed values: FICTION, NON_FICTION, SCIENCE, HISTORY",
+      },
+    },
+    isbn: {
+      type: String,
+      required: [true, "isbn field are required"],
+      unique: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+    },
+    copies: {
+      type: Number,
+      required: [true, "copies field are required"],
+      min: [0, "Not allow negative number"],
+    },
+    available: {
+      type: Boolean,
+      default: true,
+    },
   },
-  author: {
-    type: String,
-    required: [true, "author field are required"],
-    trim: true
-  },
- genre: {
-  type: String,
-  required: [true, 'Genre is required'],
-  enum: {
-    values: Object.values(Genre),
-    message: '{VALUE} is not a valid genre. Allowed values: FICTION, NON_FICTION, SCIENCE, HISTORY',
+  {
+    timestamps: true,
+    versionKey: false,
   }
- },
-  isbn: {
-    type: String,
-    required: [true, "isbn field are required"],
-    unique: true , 
-    trim: true
-  },
-  description: {
-    type: String
-  },
-  copies: {
-    type: Number,
-    required: [true, "copies field are required"],
-    min: [0 , "Not allow negative number"]
-  },
-  available: {
-    type: Boolean,
-    default: true
-  }
-}, {
-  timestamps: true,
-  versionKey : false
-});
+);
 
-bookSchema.pre('validate', function (next) {
-  if (this.genre && typeof this.genre === 'string') {
+bookSchema.pre("validate", function (next) {
+  if (this.genre && typeof this.genre === "string") {
     this.genre = this.genre.toUpperCase() as Genre;
   }
   next();
@@ -70,7 +74,6 @@ bookSchema.post("findOneAndDelete", async (doc, next) => {
     await Borrow.deleteMany({ book: doc._id });
     next();
   }
-})
+});
 
-
-export const Book = model('Book', bookSchema);
+export const Book = model("Book", bookSchema);

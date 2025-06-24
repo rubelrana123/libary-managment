@@ -9,14 +9,14 @@ A powerful backend API for managing a library system, built with **Node.js**, **
 ## 🌐 Live Demo
 
 - **API:** [https://libary-managment.vercel.app/](https://libary-managment.vercel.app/)
-- **Video Explanation:** [ Demo](https://www.loom.com/share/90b206e371ad4f0599a4b0a3b59ca538?sid=ceef0fad-f71e-4f9b-b5ff-a506bdbbee8c)
+- **Video Explanation:** [Click Here](https://drive.google.com/file/d/1M5MfHwMFe2MmR7FGOjvB05x5Tw-E5sjE/view?usp=sharing)
 
 ---
 
 ## 🚀 Goal
 
 - Book CRUD operations
-- Borrowing system with availability check
+- Borrow a book with availability check
 - Auto-updated book availability status
 - Borrowed books summary using MongoDB Aggregation
 - Filtering & sorting capabilities for book list
@@ -39,7 +39,7 @@ A powerful backend API for managing a library system, built with **Node.js**, **
 
 ### Prerequisites
 
-- Node.js (v14+)
+- Node.js 
 - MongoDB (local or Atlas)
 
 ### Steps
@@ -59,7 +59,7 @@ $ touch .env
 #### demo `.env`:
 
 ```
-PORT=4\5000
+PORT=5000
 DB_NAME=your_db_name
 DB_PASSWORD=your_password
 ```
@@ -100,7 +100,7 @@ LIBRARY-MANAGEMENT/
 | ------------- | ------- | -------- | ------------------------------------------------------------------- |
 | `title`       | string  | Yes      | —                                                                   |
 | `author`      | string  | Yes      | —                                                                   |
-| `genre`       | enum    | Yes      | One of: FICTION, NON\_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY |
+| `genre`       | enum    | Yes      | One of: FICTION, NON_FICTION, SCIENCE, HISTORY, BIOGRAPHY, FANTASY |
 | `isbn`        | string  | Yes      | Unique ISBN enforced in DB                                          |
 | `description` | string  | No       | Optional                                                            |
 | `copies`      | number  | Yes      | Integer ≥ 0                                                         |

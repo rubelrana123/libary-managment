@@ -9,32 +9,32 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = 400;
     message = "Validation failed";
   }
- //duplicate key error  handler
-  if (err.code === 11000 && err.name === 'MongoServerError') {
-      const duplicatedField = Object.keys(err.keyValue)[0];
-      const duplicatedValue = err.keyValue[duplicatedField];
-       res.status(409).json({
-        message: "Validation failed",
-        success: false,
-        error: {
-          name: "DuplicateKeyError",
-          errors: {
-            [duplicatedField]: {
-              message: `The ${duplicatedField} "${duplicatedValue}" already exists.`,
-              name: "DuplicateError",
-              kind: "unique",
-              path: duplicatedField,
-              value: duplicatedValue
-            }
-          }
-        }
-      });
-    }
+  //duplicate key error  handler
+  if (err.code === 11000 && err.name === "MongoServerError") {
+    const duplicatedField = Object.keys(err.keyValue)[0];
+    const duplicatedValue = err.keyValue[duplicatedField];
+    res.status(409).json({
+      message: "Validation failed",
+      success: false,
+      error: {
+        name: "DuplicateKeyError",
+        errors: {
+          [duplicatedField]: {
+            message: `The ${duplicatedField} "${duplicatedValue}" already exists.`,
+            name: "DuplicateError",
+            kind: "unique",
+            path: duplicatedField,
+            value: duplicatedValue,
+          },
+        },
+      },
+    });
+  }
 
   res.status(statusCode).json({
     success: false,
     message,
-    error: err.errors
+    error: err.errors,
   });
 };
 

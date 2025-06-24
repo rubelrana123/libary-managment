@@ -1,8 +1,8 @@
 import { Schema, Types, model } from "mongoose";
-import { BorrowStaticMethods, IBorrow } from "../interfaces/borrow.interface"; 
+import { BorrowStaticMethods, IBorrow } from "../interfaces/borrow.interface";
 import { Book } from "./books.model";
 
-const borrowSchema = new Schema<IBorrow ,BorrowStaticMethods>(
+const borrowSchema = new Schema<IBorrow, BorrowStaticMethods>(
   {
     book: {
       type: Schema.Types.ObjectId,
@@ -12,7 +12,7 @@ const borrowSchema = new Schema<IBorrow ,BorrowStaticMethods>(
     quantity: {
       type: Number,
       required: [true, "quantity field are required"],
-      min: [0, '{value} not allow ,only positve value allow'],
+      min: [0, "{value} not allow ,only positve value allow"],
       validate: {
         validator: Number.isInteger,
         message: "Quantity must be an integer value",
@@ -42,9 +42,7 @@ borrowSchema.pre("save", async function (next) {
   }
 
   if (book.copies < borrow.quantity) {
-    return next(
-      new Error(`Only ${book.copies} copies are available`)
-    );
+    return next(new Error(`Only ${book.copies} copies are available`));
   }
   book.copies -= borrow.quantity;
   await book.save();
@@ -53,16 +51,20 @@ borrowSchema.pre("save", async function (next) {
 });
 
 // borrow.model.ts
-borrowSchema.static("checkBookAvailability", async function (bookId: Types.ObjectId) {
-  const book = await Book.findById(bookId);
-  if (!book) throw new Error("Book not found");
+borrowSchema.static(
+  "checkBookAvailability",
+  async function (bookId: Types.ObjectId) {
+    const book = await Book.findById(bookId);
+    if (!book) throw new Error("Book not found");
 
-  if (book.copies <= 0 && book.available === true) {
-    book.available = false;
-    await book.save();
+    if (book.copies <= 0 && book.available === true) {
+      book.available = false;
+      await book.save();
+    }
   }
-});
+);
 
-
-
-export const Borrow = model<IBorrow , BorrowStaticMethods>("Borrow", borrowSchema);
+export const Borrow = model<IBorrow, BorrowStaticMethods>(
+  "Borrow",
+  borrowSchema
+);
