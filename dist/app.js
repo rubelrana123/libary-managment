@@ -11,13 +11,13 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use("/api/books", books_routes_1.bookRouter);
 app.use("/api/borrow", borrow_routes_1.borrowRouter);
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
     res.send("welcome to the libary managment app");
 });
 app.use((req, res, next) => {
     res.status(404).json({
         success: false,
-        message: "Route Not Found"
+        message: `${req.originalUrl} Route Not Found`,
     });
 });
 app.use(globaErrorHandler_1.default);

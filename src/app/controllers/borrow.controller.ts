@@ -9,7 +9,7 @@ export const borrowedBook = async function (
   try {
     await Borrow.checkBookAvailability(req.body.book);
     const borrow = await Borrow.create(req.body);
-    res.send({
+    res.status(201).json({
       success: true,
       message: "Book borrowed successfully",
       data: borrow,

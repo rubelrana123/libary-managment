@@ -25,45 +25,45 @@ const bookSchema = new mongoose_1.Schema({
     title: {
         type: String,
         required: [true, "title field are required"],
-        trim: true
+        trim: true,
     },
     author: {
         type: String,
         required: [true, "author field are required"],
-        trim: true
+        trim: true,
     },
     genre: {
         type: String,
-        required: [true, 'Genre is required'],
+        required: [true, "Genre is required"],
         enum: {
             values: Object.values(Genre),
-            message: '{VALUE} is not a valid genre. Allowed values: FICTION, NON_FICTION, SCIENCE, HISTORY',
-        }
+            message: "{VALUE} is not a valid genre. Allowed values: FICTION, NON_FICTION, SCIENCE, HISTORY",
+        },
     },
     isbn: {
         type: String,
         required: [true, "isbn field are required"],
         unique: true,
-        trim: true
+        trim: true,
     },
     description: {
-        type: String
+        type: String,
     },
     copies: {
         type: Number,
         required: [true, "copies field are required"],
-        min: [0, "Not allow negative number"]
+        min: [0, "Not allow negative number"],
     },
     available: {
         type: Boolean,
-        default: true
-    }
+        default: true,
+    },
 }, {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
 });
-bookSchema.pre('validate', function (next) {
-    if (this.genre && typeof this.genre === 'string') {
+bookSchema.pre("validate", function (next) {
+    if (this.genre && typeof this.genre === "string") {
         this.genre = this.genre.toUpperCase();
     }
     next();
@@ -80,4 +80,4 @@ bookSchema.post("findOneAndDelete", (doc, next) => __awaiter(void 0, void 0, voi
         next();
     }
 }));
-exports.Book = (0, mongoose_1.model)('Book', bookSchema);
+exports.Book = (0, mongoose_1.model)("Book", bookSchema);

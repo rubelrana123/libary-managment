@@ -12,7 +12,7 @@ const globalErrorHandler = (err, req, res, next) => {
         message = "Validation failed";
     }
     //duplicate key error  handler
-    if (err.code === 11000 && err.name === 'MongoServerError') {
+    if (err.code === 11000 && err.name === "MongoServerError") {
         const duplicatedField = Object.keys(err.keyValue)[0];
         const duplicatedValue = err.keyValue[duplicatedField];
         res.status(409).json({
@@ -26,16 +26,16 @@ const globalErrorHandler = (err, req, res, next) => {
                         name: "DuplicateError",
                         kind: "unique",
                         path: duplicatedField,
-                        value: duplicatedValue
-                    }
-                }
-            }
+                        value: duplicatedValue,
+                    },
+                },
+            },
         });
     }
     res.status(statusCode).json({
         success: false,
         message,
-        error: err.errors
+        error: err.errors,
     });
 };
 exports.default = globalErrorHandler;

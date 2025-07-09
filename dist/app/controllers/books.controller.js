@@ -31,13 +31,10 @@ const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const sortBy = req.query.sortBy || "createdAt";
         const sortOrder = req.query.sort === "desc" ? -1 : 1;
         const limit = parseInt(req.query.limit) || 10;
-        // Base query
         let query = books_model_1.Book.find();
-        // Apply genre filter
         if (filter) {
             query = books_model_1.Book.find({ genre: filter });
         }
-        // Apply sort and limit
         const books = yield query.sort({ [sortBy]: sortOrder }).limit(limit);
         res.status(200).json({
             success: true,
@@ -54,10 +51,10 @@ const getBookById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const id = req.params.bookId;
         const book = yield books_model_1.Book.findById(id);
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Book retrieved successfully",
-            data: book
+            data: book,
         });
     }
     catch (error) {
@@ -70,7 +67,6 @@ const getBookById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getBookById = getBookById;
 const updateBookById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //  {copies : 10}
     try {
         const id = req.params.bookId;
         const payload = req.body;
@@ -82,7 +78,7 @@ const updateBookById = (req, res) => __awaiter(void 0, void 0, void 0, function*
             });
         }
         yield book.updateAvailability();
-        res.status(201).json({
+        res.status(200).json({
             success: true,
             message: "Book updated successfully",
             data: book,

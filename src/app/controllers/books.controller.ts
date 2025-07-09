@@ -46,7 +46,7 @@ export const getBookById = async (req: Request, res: Response) => {
   try {
     const id = req.params.bookId;
     const book = await Book.findById(id);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Book retrieved successfully",
       data: book,
@@ -63,13 +63,20 @@ export const updateBookById = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  //  {copies : 10}
+
+ 
 
   try {
     const id = req.params.bookId;
     const payload = req.body;
+    console.log("book from body", payload, id)
 
-    const book = await Book.findByIdAndUpdate(id, payload, { new: true });
+    // const book = await Book.findByIdAndUpdate(id, payload, { new: true });
+        const book = await Book.findByIdAndUpdate(id, payload, {
+      new: true,      // return the updated document
+      overwrite: true // replace the document entirely
+    });
+    console.log("book from controller", book)
 
     if (book === null) {
       return res.status(404).json({
@@ -78,7 +85,7 @@ export const updateBookById = async (
       });
     }
     await book.updateAvailability();
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       message: "Book updated successfully",
       data: book,

@@ -21,7 +21,7 @@ const borrowSchema = new mongoose_1.Schema({
     quantity: {
         type: Number,
         required: [true, "quantity field are required"],
-        min: [0, '{value} not allow ,only positve value allow'],
+        min: [0, "{value} not allow ,only positve value allow"],
         validate: {
             validator: Number.isInteger,
             message: "Quantity must be an integer value",
