@@ -24,18 +24,33 @@ export const getAllBooks = async (
   try {
     const filter = req.query.filter as string;
     const sortBy = (req.query.sortBy as string) || "createdAt";
-    const sortOrder = req.query.sort === "desc" ? -1 : 1;
-    const limit = parseInt(req.query.limit as string) || 10;
-    let query = Book.find();
+    const sortOrder = req.query.sort === "asc" ? 1 : -1;
 
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 6;
+    const skip = (page - 1) * limit;
+
+    const query: any = {};
     if (filter) {
-      query = Book.find({ genre: filter });
+      query.genre = filter;
     }
-    const books = await query.sort({ [sortBy]: sortOrder }).limit(limit);
+
+    const books = await Book.find(query)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Book.countDocuments(query);
 
     res.status(200).json({
       success: true,
       message: "Books retrieved successfully",
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
       data: books,
     });
   } catch (error: any) {

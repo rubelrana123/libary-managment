@@ -10,5 +10,5 @@ exports.bookRouter = express_1.default.Router();
 exports.bookRouter.post("/", books_controller_1.createBook);
 exports.bookRouter.get("/", books_controller_1.getAllBooks);
 exports.bookRouter.get("/:bookId", books_controller_1.getBookById);
-exports.bookRouter.patch("/:bookId", books_controller_1.updateBookById);
+exports.bookRouter.put("/:bookId", books_controller_1.updateBookById);
 exports.bookRouter.delete("/:bookId", books_controller_1.deleteBookById);

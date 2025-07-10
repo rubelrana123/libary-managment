@@ -29,13 +29,14 @@ const getAllBooks = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const filter = req.query.filter;
         const sortBy = req.query.sortBy || "createdAt";
-        const sortOrder = req.query.sort === "desc" ? -1 : 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const sortOrder = req.query.sort === "asc" ? 1 : -1;
+        // const limit = parseInt(req.query.limit as string) || 10;
         let query = books_model_1.Book.find();
         if (filter) {
             query = books_model_1.Book.find({ genre: filter });
         }
-        const books = yield query.sort({ [sortBy]: sortOrder }).limit(limit);
+        const books = yield query.sort({ [sortBy]: sortOrder });
+        // .limit(limit);
         res.status(200).json({
             success: true,
             message: "Books retrieved successfully",
@@ -70,7 +71,13 @@ const updateBookById = (req, res) => __awaiter(void 0, void 0, void 0, function*
     try {
         const id = req.params.bookId;
         const payload = req.body;
-        const book = yield books_model_1.Book.findByIdAndUpdate(id, payload, { new: true });
+        console.log("book from body", payload, id);
+        // const book = await Book.findByIdAndUpdate(id, payload, { new: true });
+        const book = yield books_model_1.Book.findByIdAndUpdate(id, payload, {
+            new: true, // return the updated document
+            overwrite: true // replace the document entirely
+        });
+        console.log("book from controller", book);
         if (book === null) {
             return res.status(404).json({
                 success: false,
